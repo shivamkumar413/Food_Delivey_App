@@ -12,11 +12,11 @@
 export const restaurants = [
     {
         id : 1,
-        name : "7-Eleven",
-        location : "Shri ambika , kharghar",
-        rating : 4.1,
+        name : "Good Flippin' Burgers",
+        location : "kharghar",
+        rating : 4.6,
         distance : 3.5,
-        description : "Burger, Sandwich, Beverages",
+        description : "Burger, Wrap, Bucket",
         specificTag : "None",
         image : "https://images.unsplash.com/photo-1568901346375-23c9450c58cd"
     },
@@ -28,7 +28,7 @@ export const restaurants = [
         distance : 4.2,
         description : "Indian, Pure veg, Healthy Food",
         specificTag : "Pure Veg",
-        image : "https://images.unsplash.com/photo-1546833999-b9f581a1996d"
+        image : "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_264,h_288,c_fill/RX_THUMBNAIL/IMAGES/VENDOR/2026/3/30/509d222d-ee71-4c2d-8376-f4638f882778_1020557.JPG"
     },
    {
         id : 3,
@@ -58,7 +58,7 @@ export const restaurants = [
         distance : 2.7,
         description : "Mughlai, Biryani, Kebabs",
         specificTag : "Non Veg",
-        image : "https://images.unsplash.com/photo-1563379091339-03246963d29c"
+        image : "https://b.zmtcdn.com/data/pictures/chains/4/19128124/fac686e3b1298cb904379b7912196ae4.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A"
     },
     {
         id : 6,
@@ -78,7 +78,7 @@ export const restaurants = [
         distance : 0.7,
         description : "Pizza, Desserts, Ice Cream",
         specificTag : "Desserts",
-        image : "https://images.unsplash.com/photo-1520201163981-8cc95007dd2e"
+        image : "https://b.zmtcdn.com/data/pictures/0/21676760/173917083364f4ece5-2d86-45ba-9d4c-6488d2c39565.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A"
     },
     {
         id : 8,
