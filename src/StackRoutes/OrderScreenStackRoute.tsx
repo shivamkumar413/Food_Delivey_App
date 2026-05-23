@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import InstamartScreen from '../Screens/InstamartScreen';
+import OrderScreen from '../Screens/OrderScreen';
 
 const Stack = createStackNavigator();
 
-export default function InstamartScreenStackRoute(){
+export default function OrderScreenStackRoute(){
     return(
         <Stack.Navigator>
             <Stack.Screen 
-                name='InstamartStack'  
-                component={InstamartScreen} 
+                name='Order'  
+                component={OrderScreen} 
                 options={{
                     headerShown : false,
                 }}

@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import GiftablesScreen from '../Screens/GiftablesScreen';
+import ProfileScreen from '../Screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
-export default function GiftablesScreenStackRoute(){
+export default function ProfileScreenStackRoute(){
     return(
         <Stack.Navigator>
             <Stack.Screen 
                 name='GiftablesStack'  
-                component={GiftablesScreen} 
+                component={ProfileScreen}
+                options={{
+                    headerShown : false
+                }} 
             />
         </Stack.Navigator>
     )

@@ -47,7 +47,7 @@ export default function SearchBarView() {
 const styles = StyleSheet.create({
     container : {
         marginHorizontal : 10,
-        marginVertical : 10,
+        marginBottom : 10,
         paddingHorizontal : 10,
         paddingVertical : 15,
         

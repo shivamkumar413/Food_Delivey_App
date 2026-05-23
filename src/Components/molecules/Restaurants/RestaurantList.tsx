@@ -18,6 +18,7 @@ export default function RestaurantList() {
       <Text style={styles.text}>Top restaurants to explore</Text>
       <Text style={{fontSize : 12, fontWeight : '400',marginBottom : 5}}>Featured Restaurants</Text>
       <FlatList 
+        scrollEnabled={false}
         data={restaurants}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
