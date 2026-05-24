@@ -48,6 +48,7 @@ export default function Header({screenText,time} : {screenText : string,time : n
         </View>
         <View>
             <Ionicons 
+                // @ts-ignore
                 onPress={()=>navigation.navigate('Profile')}
                 name='person' 
                 size={25} 

@@ -46,6 +46,7 @@ export default function SearchBarView() {
 
 const styles = StyleSheet.create({
     container : {
+        zIndex : 10,
         marginHorizontal : 10,
         marginBottom : 10,
         paddingHorizontal : 10,
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
         
         flexDirection : 'row',
         alignItems : 'center',
-        backgroundColor : '#e2dddd',
+        backgroundColor : '#f7f4f4',
         fontSize : 20,
         borderRadius : 10,
         borderColor : 'gray',

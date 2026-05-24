@@ -1,6 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { SearchBar } from 'react-native-screens'
 import SearchBarView from '../Components/atoms/SearchBar/SearchBarView'
 import RestaurantList from '../Components/molecules/Restaurants/RestaurantList'
 import Header from '../Components/molecules/Header/Header'
@@ -14,23 +13,31 @@ export default function HomeScreen() {
     <ScrollView 
       style={StyleSheet.compose(
         styles.container,
-        {marginTop : isSticky ? insets.top : 0}
+        {
+          marginTop : isSticky ? insets.top : 0,
+        }
       )}
-      stickyHeaderIndices={[1]}
+      stickyHeaderIndices={[2]}
       onScroll={(e)=>{
         //console.log(e.nativeEvent.contentOffset.y)
         const y = e.nativeEvent.contentOffset.y;
-          if (y > 77) {
-            setIsSticky(true);
-          } else {
-            setIsSticky(false);
-          }
+        const sticky = y > 77;
+        if (sticky !== isSticky) {
+          setIsSticky(sticky);
+        }
 
       }}
       scrollEventThrottle={16}
     >
+      <StatusBar barStyle={'dark-content'}/>
       <Header screenText='Hot Food' time={20}/>
-      <SearchBarView />
+      <View style={{
+          paddingVertical : isSticky ? 20 : 0,
+          backgroundColor : '#F7F7F7'
+      }}>
+        <SearchBarView />
+      </View>
+      
       <RestaurantList />
     </ScrollView>
   )
@@ -39,5 +46,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  searchBarContainer : {
+
   }
 })

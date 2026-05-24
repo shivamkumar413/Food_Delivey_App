@@ -1,8 +1,11 @@
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { menuItem } from '../../utils/Mockdata/Menu';
 import { MaterialCommunityIcons, Foundation } from '@expo/vector-icons';
 import FoodDetailModal from '../../Components/atoms/FoodDetailModal/FoodDetailModal';
+import RestaurantDetailHeader from '../../Components/atoms/Restaurants/RestaurantDetailHeader';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRestaurantScreenHeaderStore } from '../../Stores/useRestaurantScreenHeaderStore';
 
 
 type menuItemType = {
@@ -23,6 +26,8 @@ export default function RestaurantScreen({route} : any) {
     const [menu,setMenu] = React.useState<menuItemType[]>([]);
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [modalDetails,setModalDetails] = React.useState<menuItemType>();
+    const { headerShown,setHeaderShown } = useRestaurantScreenHeaderStore();
+
 
     useEffect(()=>{
         if(!name) return;
@@ -35,30 +40,34 @@ export default function RestaurantScreen({route} : any) {
         setModalDetails(item);
     }
     return (
-        <View style={{flex : 1,paddingVertical : 10}}>
-            <View style = {styles.restaurantInfoContainer}>
-                <View style={styles.innerContainer}>
-                    <View style={{flex : 1,}}>
-                        <Text style={styles.restaurantName}>{name}</Text>
-                        <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center',marginVertical : 2}}>
-                            <View style={{flexDirection : 'row', justifyContent : 'flex-start', alignItems : 'center',marginVertical : 2}}>
-                                <Text style={styles.distanceText}>{distance} km</Text>
-                                <Text style={styles.locationText}>{location}</Text>
-                            </View>
-                            <View style={{marginLeft : 20, flexDirection : 'row', alignItems : 'center', backgroundColor : '#EAFBE7', paddingHorizontal : 5, borderRadius : 5}}>
-                                <Foundation name='star' size={12} color={'green'}/>
-                                <Text style={styles.ratingText}>{rating}</Text>
-                            </View>
-                        </View>
-                    </View>
-                    
+        <ScrollView 
+            onScroll={(e)=>{
+                const y = e.nativeEvent.contentOffset.y;
+                if(y>10) setHeaderShown(true)
+                else if(y<=10) setHeaderShown(false)
 
-                    
-                </View>
-                
+            }}
+            style={{flex : 1,paddingVertical : 0,}}
+            scrollEventThrottle={16}
+        
+        >
+            <StatusBar barStyle={'light-content'}/>
+            <View
+                style={styles.restaurantHeaderContainer}
+            >
+                <RestaurantDetailHeader 
+                    name={name}
+                    distance={distance}
+                    location={location}
+                    rating={rating}
+                />
+                <Text style={styles.restaurantHeaderContainerText}>
+                    Free delivery on orders above ₹99
+                </Text>
             </View>
 
             <FlatList 
+                scrollEnabled={false}
                 data={menu}
                 numColumns={2}
                 columnWrapperStyle={{
@@ -108,43 +117,25 @@ export default function RestaurantScreen({route} : any) {
                 itemDetail={modalDetails}
             
             />
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
-    restaurantInfoContainer : {
-        padding : 10,
-        margin : 10,
-        elevation : 5,
-        backgroundColor : 'white',
-        borderRadius : 15,
-        flexDirection : 'row',
-        justifyContent : 'space-between',
+    restaurantHeaderContainer : {
+        backgroundColor:'#1D0807',
+        paddingTop : 50,
+        paddingBottom : 20,
+        borderBottomLeftRadius : 30,
+        borderBottomRightRadius : 30,
+        justifyContent : 'center',
+        alignItems : 'center'
     },
-    innerContainer : {
-        flex : 1,
-        flexDirection : 'row',
-        justifyContent : 'space-between',
-        width : '100%',
-    },
-    restaurantName : {
-        fontSize : 20,
-        fontWeight : '600',
-    },
-    distanceText : {
-        borderRightColor : 'gray',
-        borderRightWidth : 1,
-        paddingRight : 5,
-        color : 'gray',
-        fontSize : 12,
-        fontWeight : '600',
-    },
-    locationText : {
-        paddingLeft : 5,
-        color : 'gray',
-        fontSize : 12,
-        fontWeight : '600',
+    restaurantHeaderContainerText : {
+        color:'white',
+        fontSize : 13,
+        fontWeight : '500',
+        marginTop : 5
     },
     flatListContainer : {
         flex : 1,

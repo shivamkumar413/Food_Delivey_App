@@ -4,6 +4,7 @@ import HomeScreen from '../Screens/HomeScreen';
 import RestaurantScreen from '../Screens/Restaurant/RestaurantScreen';
 import { Props } from '../Components/atoms/Restaurants/Restaurants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRestaurantScreenHeaderStore } from '../Stores/useRestaurantScreenHeaderStore';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ export type HomeStackParamList = {
 export default function HomeScreenStackRoute(){
     
     const insets = useSafeAreaInsets();
+    const { headerShown } = useRestaurantScreenHeaderStore();
 
     return(
         <Stack.Navigator>
@@ -29,6 +31,9 @@ export default function HomeScreenStackRoute(){
             <Stack.Screen 
                 name='RestaurantScreen'  
                 component={RestaurantScreen} 
+                options={{
+                    headerShown : headerShown
+                }}
             />
         </Stack.Navigator>
     )
