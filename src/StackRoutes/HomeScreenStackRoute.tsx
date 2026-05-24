@@ -5,6 +5,8 @@ import RestaurantScreen from '../Screens/Restaurant/RestaurantScreen';
 import { Props } from '../Components/atoms/Restaurants/Restaurants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRestaurantScreenHeaderStore } from '../Stores/useRestaurantScreenHeaderStore';
+import RestaurantScreenHeader from '../Components/molecules/RestaurantScreenHeader/RestaurantScreenHeader';
+import CartScreen from '../Screens/CartScreen/CartScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,8 +34,14 @@ export default function HomeScreenStackRoute(){
                 name='RestaurantScreen'  
                 component={RestaurantScreen} 
                 options={{
+                    header : ()=><RestaurantScreenHeader />,
                     headerShown : headerShown
                 }}
+            />
+
+            <Stack.Screen 
+                name="CartScreen"
+                component={CartScreen}
             />
         </Stack.Navigator>
     )

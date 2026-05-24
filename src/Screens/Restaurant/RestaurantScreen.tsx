@@ -6,6 +6,7 @@ import FoodDetailModal from '../../Components/atoms/FoodDetailModal/FoodDetailMo
 import RestaurantDetailHeader from '../../Components/atoms/Restaurants/RestaurantDetailHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRestaurantScreenHeaderStore } from '../../Stores/useRestaurantScreenHeaderStore';
+import { useOrderStore } from '../../Stores/useOrderStore';
 
 
 type menuItemType = {
@@ -19,6 +20,14 @@ type menuItemType = {
     category : string,
 }
 
+interface Order  {
+    restaurantName ?: string;
+    itemName : string;
+    itemImage : string;
+    restaurantAddress ?: string;
+    price : number;
+}
+
 
 export default function RestaurantScreen({route} : any) {
 
@@ -26,32 +35,47 @@ export default function RestaurantScreen({route} : any) {
     const [menu,setMenu] = React.useState<menuItemType[]>([]);
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [modalDetails,setModalDetails] = React.useState<menuItemType>();
-    const { headerShown,setHeaderShown } = useRestaurantScreenHeaderStore();
+    const {headerShown,setHeaderShown,setHeaderText } = useRestaurantScreenHeaderStore();
+    const { setFoodOrders } = useOrderStore();
 
 
     useEffect(()=>{
         if(!name) return;
         let obj = menuItem[name as keyof typeof menuItem];
         setMenu(obj);
+        setHeaderShown(false);
+        setHeaderText(name);
     }, [id])
 
     function handleModalOpenPress(item : menuItemType){
         setIsModalVisible(true);
         setModalDetails(item);
     }
+
+    function handleAddToCart(builder : Order){
+        setFoodOrders({
+            restaurantName : builder.restaurantName,
+            itemName : builder.itemName,
+            itemImage : builder.itemImage,
+            restaurantAddress : builder.restaurantAddress,
+            price : builder.price,
+
+        })
+    }
+
     return (
         <ScrollView 
             onScroll={(e)=>{
                 const y = e.nativeEvent.contentOffset.y;
                 if(y>10) setHeaderShown(true)
-                else if(y<=10) setHeaderShown(false)
+                else if(y<=20) setHeaderShown(false)
 
             }}
             style={{flex : 1,paddingVertical : 0,}}
             scrollEventThrottle={16}
         
         >
-            <StatusBar barStyle={'light-content'}/>
+            <StatusBar barStyle={headerShown ? 'dark-content' : 'light-content'}/>
             <View
                 style={styles.restaurantHeaderContainer}
             >
@@ -101,7 +125,16 @@ export default function RestaurantScreen({route} : any) {
                             <Text style={styles.priceText}>
                                 ₹{item.price}
                             </Text>
-                            <Pressable style={styles.addButton}>
+                            <Pressable 
+                                onPress={()=>handleAddToCart({
+                                    restaurantName : name,
+                                    restaurantAddress : location,
+                                    itemName : item.name,
+                                    itemImage : item.image,
+                                    price : item.price
+                                })}
+                                style={styles.addButton}
+                            >
                                 <Text  style={styles.addButtonText}>ADD</Text>
                             </Pressable>
                         </View>
