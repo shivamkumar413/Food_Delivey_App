@@ -4,42 +4,23 @@ import SearchBarView from '../Components/atoms/SearchBar/SearchBarView'
 import RestaurantList from '../Components/molecules/Restaurants/RestaurantList'
 import Header from '../Components/molecules/Header/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useCartStore } from '../Stores/useCartStore'
+import CartDropdown from '../Components/molecules/CartDropdown/CartDropdown'
 
 export default function HomeScreen() {
 
-  const [isSticky, setIsSticky] = React.useState(false);
-  const insets = useSafeAreaInsets()
+  const { totalItemCount } = useCartStore()
   return (
-    <ScrollView 
-      style={StyleSheet.compose(
-        styles.container,
-        {
-          marginTop : isSticky ? insets.top : 0,
-        }
-      )}
-      stickyHeaderIndices={[2]}
-      onScroll={(e)=>{
-        //console.log(e.nativeEvent.contentOffset.y)
-        const y = e.nativeEvent.contentOffset.y;
-        const sticky = y > 77;
-        if (sticky !== isSticky) {
-          setIsSticky(sticky);
-        }
-
-      }}
-      scrollEventThrottle={16}
-    >
-      <StatusBar barStyle={'dark-content'}/>
-      <Header screenText='Hot Food' time={20}/>
-      <View style={{
-          paddingVertical : isSticky ? 20 : 0,
-          backgroundColor : '#F7F7F7'
-      }}>
-        <SearchBarView />
-      </View>
-      
+    <View style={{flex : 1}}>
+    
       <RestaurantList />
-    </ScrollView>
+      { 
+          (totalItemCount > 0) &&
+            <CartDropdown 
+              totalItemCount={totalItemCount}
+            />
+      }
+    </View>
   )
 }
 

@@ -53,7 +53,7 @@ export default function Restaurants({
 const styles = StyleSheet.create({
     container : {
         flexDirection : 'row',
-        
+        marginHorizontal : 10,
         marginBottom : 30,
     },
     image : {

@@ -7,6 +7,10 @@ import RestaurantDetailHeader from '../../Components/atoms/Restaurants/Restauran
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRestaurantScreenHeaderStore } from '../../Stores/useRestaurantScreenHeaderStore';
 import { useOrderStore } from '../../Stores/useOrderStore';
+import { AntDesign } from '@expo/vector-icons';
+import AddButtonwithplusminus from '../../Components/atoms/AddButtonwithplusminus/AddButtonwithplusminus';
+import CartDropdown from '../../Components/molecules/CartDropdown/CartDropdown';
+import { useCartStore } from '../../Stores/useCartStore';
 
 
 type menuItemType = {
@@ -28,6 +32,9 @@ interface Order  {
     price : number;
 }
 
+type ItemCartCount = {
+    [key: string]: number;
+}
 
 export default function RestaurantScreen({route} : any) {
 
@@ -37,6 +44,9 @@ export default function RestaurantScreen({route} : any) {
     const [modalDetails,setModalDetails] = React.useState<menuItemType>();
     const {headerShown,setHeaderShown,setHeaderText } = useRestaurantScreenHeaderStore();
     const { setFoodOrders } = useOrderStore();
+    const { itemCartCount,setItemCartCount,restaurantName,setRestaurantName,totalItemCount,setTotalItemCount } = useCartStore();
+    // const [ itemCartCount,setItemCartCount ] = React.useState<ItemCartCount>({});
+    // const [totalItemCount,setTotalItemCount] = React.useState<number>(0)
 
 
     useEffect(()=>{
@@ -52,54 +62,74 @@ export default function RestaurantScreen({route} : any) {
         setModalDetails(item);
     }
 
-    function handleAddToCart(builder : Order){
-        setFoodOrders({
-            restaurantName : builder.restaurantName,
-            itemName : builder.itemName,
-            itemImage : builder.itemImage,
-            restaurantAddress : builder.restaurantAddress,
-            price : builder.price,
-
+    function handleAddToCart(itemName : string){
+        setItemCartCount({
+            [itemName] : (itemCartCount[itemName] || 0) + 1
         })
+        setTotalItemCount(totalItemCount + 1)
+    }
+
+    function handleAddPress(itemName : string){
+        setItemCartCount({
+            [itemName] : itemCartCount[itemName] + 1
+        })
+        setTotalItemCount(totalItemCount + 1)
+        console.log(totalItemCount)
+    }
+
+    function handleMinusPress(itemName : string){
+        setItemCartCount({
+            [itemName] : itemCartCount[itemName] - 1
+        })
+        setTotalItemCount(totalItemCount - 1)
     }
 
     return (
-        <ScrollView 
+        <View>
+
+        <FlatList 
             onScroll={(e)=>{
                 const y = e.nativeEvent.contentOffset.y;
                 if(y>10) setHeaderShown(true)
                 else if(y<=20) setHeaderShown(false)
 
             }}
-            style={{flex : 1,paddingVertical : 0,}}
             scrollEventThrottle={16}
-        
-        >
-            <StatusBar barStyle={headerShown ? 'dark-content' : 'light-content'}/>
-            <View
-                style={styles.restaurantHeaderContainer}
-            >
-                <RestaurantDetailHeader 
-                    name={name}
-                    distance={distance}
-                    location={location}
-                    rating={rating}
-                />
-                <Text style={styles.restaurantHeaderContainerText}>
-                    Free delivery on orders above ₹99
-                </Text>
-            </View>
+            data={menu}
+            numColumns={2}
+            ListHeaderComponent={
+                <View>
+                    <StatusBar barStyle={headerShown ? 'dark-content' : 'light-content'}/>
+                    <View
+                        style={styles.restaurantHeaderContainer}
+                    >
+                        <RestaurantDetailHeader 
+                            name={name}
+                            distance={distance}
+                            location={location}
+                            rating={rating}
+                        />
+                        <Text style={styles.restaurantHeaderContainerText}>
+                            Free delivery on orders above ₹99
+                        </Text>
+                    </View>
 
-            <FlatList 
-                scrollEnabled={false}
-                data={menu}
-                numColumns={2}
-                columnWrapperStyle={{
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 10,
-                }}
-
-                keyExtractor={item=>item.name}
+                    <FoodDetailModal 
+                        visible={isModalVisible} 
+                        setVisible={setIsModalVisible}
+                        itemDetail={modalDetails}
+                    
+                    />
+                </View>
+            }
+            ListFooterComponent={
+                <View
+                    style={{paddingVertical : (totalItemCount > 0) ?  30: 0}}
+                >
+                    {/* <Text>Hello</Text> */}
+                </View>
+            }
+            keyExtractor={item=>item.name}
                 renderItem={({item})=>(
                     <View style={styles.flatListContainer}>
                         <Pressable
@@ -125,32 +155,46 @@ export default function RestaurantScreen({route} : any) {
                             <Text style={styles.priceText}>
                                 ₹{item.price}
                             </Text>
-                            <Pressable 
-                                onPress={()=>handleAddToCart({
-                                    restaurantName : name,
-                                    restaurantAddress : location,
-                                    itemName : item.name,
-                                    itemImage : item.image,
-                                    price : item.price
-                                })}
-                                style={styles.addButton}
-                            >
-                                <Text  style={styles.addButtonText}>ADD</Text>
-                            </Pressable>
+                            {
+                                itemCartCount[item.name] > 0 
+                                    ?
+                                        <AddButtonwithplusminus 
+                                            itemCount={itemCartCount[item.name]}
+                                            onAddPress={()=>handleAddPress(item.name)}
+                                            onMinusPress={()=>handleMinusPress(item.name)}
+                                        />
+                                    :
+
+                                    <Pressable 
+                                        onPress={()=>handleAddToCart(item.name)}
+                                        style={styles.addButton}
+                                    >
+                                        
+                                        <Text  style={styles.addButtonText}>ADD</Text>
+                                    </Pressable>
+                            }
+                            
                         </View>
                         
                     </View>
-                )}
-                
-            />
+                )}  
 
-            <FoodDetailModal 
-                visible={isModalVisible} 
-                setVisible={setIsModalVisible}
-                itemDetail={modalDetails}
-            
-            />
-        </ScrollView>
+        />
+
+        
+                
+            {
+                totalItemCount > 0 &&  
+                    <CartDropdown
+                        totalItemCount={totalItemCount}
+                    />
+            }
+        </View> 
+
+        
+        
+
+        
     )
 }
 

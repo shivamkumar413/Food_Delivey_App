@@ -1,10 +1,13 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { restaurants } from '../../../utils/Mockdata/Restaurants'
 import Restaurants from '../../atoms/Restaurants/Restaurants'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack' 
 import { HomeStackParamList } from '../../../StackRoutes/HomeScreenStackRoute'
+import SearchBarView from '../../atoms/SearchBar/SearchBarView'
+import Header from '../Header/Header'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type NavigationProp = StackNavigationProp<
   HomeStackParamList,
@@ -13,13 +16,58 @@ type NavigationProp = StackNavigationProp<
 
 export default function RestaurantList() {
   const navigation = useNavigation<NavigationProp>();
+  const [showHomeScreenHeader,setShowHomeScreenHeader] = React.useState(false);
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Top restaurants to explore</Text>
-      <Text style={{fontSize : 12, fontWeight : '400',marginBottom : 5}}>Featured Restaurants</Text>
+    <View style={StyleSheet.compose(
+      styles.container,
+      {
+      }
+    )}>
+      
       <FlatList 
-        scrollEnabled={false}
+        scrollEnabled={true}
         data={restaurants}
+        onScroll={(e)=>{
+        //console.log(e.nativeEvent.contentOffset.y)
+        const y = e.nativeEvent.contentOffset.y;
+        if(y>77){
+          setShowHomeScreenHeader(true);
+        }
+        if(y<=77){
+          setShowHomeScreenHeader(false)
+        }
+
+      }}
+      scrollEventThrottle={16}
+        ListHeaderComponent={
+          <>
+            <StatusBar barStyle={'dark-content'}/>
+            {
+              showHomeScreenHeader ? 
+              <View style={{marginVertical : 100,backgroundColor : 'white'}}>
+            
+              </View> : 
+              <>
+                <Header screenText='Hot Food' time={20}/>
+                <View style={{
+                    // paddingVertical : isSticky ? 20 : 0,
+                    backgroundColor : '#F7F7F7'
+                }}>
+                  <SearchBarView />
+                  
+                </View>
+              </>
+            }
+            
+            <Text style={StyleSheet.compose(
+              styles.text,
+              {}
+              // {marginTop : showHomeScreenHeader ? 140 : 0}
+            )}>Top restaurants to explore</Text>
+            <Text style={styles.text2}>Featured Restaurants</Text>
+          </>
+        }
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
           <Pressable onPress={()=>navigation.navigate('RestaurantScreen', item)}>
@@ -36,6 +84,25 @@ export default function RestaurantList() {
           </Pressable>
         )}
       />
+
+       {
+        showHomeScreenHeader && 
+        <View 
+          style={{
+            position : 'absolute',
+            top : -insets.top,
+            left : 0,
+            right : 0,
+            marginTop : insets.top,
+            paddingTop : insets.top + 10,
+            paddingBottom : 20,
+            backgroundColor : '#F8F8F8'
+          }}
+        >
+
+          <SearchBarView />
+        </View>
+      } 
     </View>
   )
 }
@@ -43,12 +110,19 @@ export default function RestaurantList() {
 const styles = StyleSheet.create({
     container : {
       flex : 1,
-      marginHorizontal : 10,
+      marginHorizontal : 0,
     },
     text : {
       fontSize : 15,
       fontWeight : '500',
       marginVertical : 2, 
-      marginTop : 10
+      marginTop : 10,
+      marginHorizontal : 10,
+    },
+    text2 : {
+      fontSize : 12,
+       fontWeight : '400',
+       marginBottom : 5,
+       marginHorizontal : 10,
     }
 })

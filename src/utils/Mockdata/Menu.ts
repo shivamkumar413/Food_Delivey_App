@@ -33,22 +33,22 @@ export const menuItem = {
             category : 'Burger'
         },
         {
-            name : 'The Pioneer',
+            name : 'Hot Potatho',
             image : 'https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2024/10/22/7dfcb7df-1f64-4051-9f48-9d5eab6ef82c_1235935b-3c31-466c-b772-c90b6d00a41a.jpg',
-            price : 335,
+            price : 225,
             description : 'A crispy, spiced paneer patty, layered with our spicy garlic mayo, lettuce and onions, served in a freshly baked, soft brioche bun. Kcals: 768.18',
-            rating : 4.8,
-            numberOfRating : 32,
+            rating : 4.5,
+            numberOfRating : 35,
             isVeg : true,
             category : 'Burger'
         }, 
         {
-            name : 'The Pioneer',
+            name : 'Veggie Seagal',
             image : 'https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2024/10/22/7dfcb7df-1f64-4051-9f48-9d5eab6ef82c_1235935b-3c31-466c-b772-c90b6d00a41a.jpg',
-            price : 335,
+            price : 295,
             description : 'A crispy, spiced paneer patty, layered with our spicy garlic mayo, lettuce and onions, served in a freshly baked, soft brioche bun. Kcals: 768.18',
-            rating : 4.8,
-            numberOfRating : 32,
+            rating : 4.6,
+            numberOfRating : 221,
             isVeg : true,
             category : 'Burger'
         },
