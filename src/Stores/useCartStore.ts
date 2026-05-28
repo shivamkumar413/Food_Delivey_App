@@ -18,8 +18,9 @@ import { create } from "zustand";
 
 type cartObject = {
     itemName : string;
-    itemImage : string;
+    itemImage?: string;
     numberOfItem?: number;
+    itemPrice ?: number;
 }
 
 type Store = {

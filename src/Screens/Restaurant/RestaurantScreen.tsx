@@ -57,10 +57,11 @@ export default function RestaurantScreen({route} : any) {
         setModalDetails(item);
     }
 
-    function handleAddToCart(itemName : string,itemImage : string){
+    function handleAddToCart(itemName : string,itemImage : string,itemPrice : number){
         addToCart({
             itemName : itemName,
             itemImage : itemImage,
+            itemPrice : itemPrice
         })
         console.log(cart)
     }
@@ -111,13 +112,16 @@ export default function RestaurantScreen({route} : any) {
                     />
                 </View>
             }
-            // ListFooterComponent={
-            //     // <View
-            //     //     style={{paddingVertical : (totalItemCount > 0) ?  30: 0}}
-            //     // >
-            //     //     {/* <Text>Hello</Text> */}
-            //     // </View>
-            // }
+            ListFooterComponent={
+                <View
+                    style={{paddingVertical : (cart.reduce(
+                                (acc,curr) => acc + (curr.numberOfItem ?? 0),
+                                0,
+                            ) > 0) ?  30: 0}}
+                >
+                    {/* <Text>Hello</Text> */}
+                </View>
+            }
             keyExtractor={item=>item.name}
                 renderItem={({item})=>{
 
@@ -157,13 +161,13 @@ export default function RestaurantScreen({route} : any) {
                                             itemCount={
                                                 cartItem.numberOfItem
                                             }
-                                            onAddPress={()=>handleAddToCart(item.name,item.image)}
+                                            onAddPress={()=>handleAddToCart(item.name,item.image,item.price)}
                                             onMinusPress={()=>handleRemoveFromCart(item.name,item.image)}
                                         />
                                     :
 
                                     <Pressable 
-                                        onPress={()=>handleAddToCart(item.name,item.image)}
+                                        onPress={()=>handleAddToCart(item.name,item.image,item.price)}
                                         style={styles.addButton}
                                     >
                                         
@@ -192,12 +196,7 @@ export default function RestaurantScreen({route} : any) {
             }
         
                 
-            {/* {
-                totalItemCount > 0 &&  
-                    <CartDropdown
-                        totalItemCount={totalItemCount}
-                    />
-            } */}
+            
 
             
         </View> 

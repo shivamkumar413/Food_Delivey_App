@@ -61,7 +61,7 @@ export default function FoodDetailModal({visible,setVisible,itemDetail} : FoodDe
                         {itemDetail?.isVeg ? <MaterialCommunityIcons name="square-circle" color={'green'} size={16}/> : <MaterialCommunityIcons name="square-circle" color={'red'} size={16}/>}
                         <Text style={styles.nameText}>{itemDetail?.name}</Text>
                     </View>
-                     <Pressable style={styles.addButton}>
+                    <Pressable style={styles.addButton}>
                         <Text  style={styles.addButtonText}>ADD</Text>
                     </Pressable>
                 </View>

@@ -8,6 +8,7 @@ import { HomeStackParamList } from '../../../StackRoutes/HomeScreenStackRoute'
 import SearchBarView from '../../atoms/SearchBar/SearchBarView'
 import Header from '../Header/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useCartStore } from '../../../Stores/useCartStore'
 
 type NavigationProp = StackNavigationProp<
   HomeStackParamList,
@@ -18,6 +19,7 @@ export default function RestaurantList() {
   const navigation = useNavigation<NavigationProp>();
   const [showHomeScreenHeader,setShowHomeScreenHeader] = React.useState(false);
   const insets = useSafeAreaInsets();
+  const { cart } = useCartStore();
   return (
     <View style={StyleSheet.compose(
       styles.container,
@@ -67,6 +69,16 @@ export default function RestaurantList() {
             )}>Top restaurants to explore</Text>
             <Text style={styles.text2}>Featured Restaurants</Text>
           </>
+        }
+        ListFooterComponent={
+          <View
+            style={{paddingVertical : (cart.reduce(
+              (acc,curr) => acc + (curr.numberOfItem ?? 0),
+              0,
+              ) > 0) ?  25: 0}}
+          >
+          {/* <Text>Hello</Text> */}
+          </View>
         }
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
