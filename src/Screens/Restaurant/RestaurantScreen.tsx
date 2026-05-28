@@ -6,7 +6,6 @@ import FoodDetailModal from '../../Components/atoms/FoodDetailModal/FoodDetailMo
 import RestaurantDetailHeader from '../../Components/atoms/Restaurants/RestaurantDetailHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRestaurantScreenHeaderStore } from '../../Stores/useRestaurantScreenHeaderStore';
-import { useOrderStore } from '../../Stores/useOrderStore';
 import { AntDesign } from '@expo/vector-icons';
 import AddButtonwithplusminus from '../../Components/atoms/AddButtonwithplusminus/AddButtonwithplusminus';
 import CartDropdown from '../../Components/molecules/CartDropdown/CartDropdown';
@@ -43,11 +42,7 @@ export default function RestaurantScreen({route} : any) {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [modalDetails,setModalDetails] = React.useState<menuItemType>();
     const {headerShown,setHeaderShown,setHeaderText } = useRestaurantScreenHeaderStore();
-    const { setFoodOrders } = useOrderStore();
-    const { itemCartCount,setItemCartCount,restaurantName,setRestaurantName,totalItemCount,setTotalItemCount } = useCartStore();
-    // const [ itemCartCount,setItemCartCount ] = React.useState<ItemCartCount>({});
-    // const [totalItemCount,setTotalItemCount] = React.useState<number>(0)
-
+    const { cart,addToCart,removeFromCart } = useCartStore();
 
     useEffect(()=>{
         if(!name) return;
@@ -62,27 +57,21 @@ export default function RestaurantScreen({route} : any) {
         setModalDetails(item);
     }
 
-    function handleAddToCart(itemName : string){
-        setItemCartCount({
-            [itemName] : (itemCartCount[itemName] || 0) + 1
+    function handleAddToCart(itemName : string,itemImage : string){
+        addToCart({
+            itemName : itemName,
+            itemImage : itemImage,
         })
-        setTotalItemCount(totalItemCount + 1)
+        console.log(cart)
     }
 
-    function handleAddPress(itemName : string){
-        setItemCartCount({
-            [itemName] : itemCartCount[itemName] + 1
+    function handleRemoveFromCart(itemName : string,itemImage : string){
+        removeFromCart({
+            itemName : itemName,
+            itemImage : itemImage,
         })
-        setTotalItemCount(totalItemCount + 1)
-        console.log(totalItemCount)
     }
 
-    function handleMinusPress(itemName : string){
-        setItemCartCount({
-            [itemName] : itemCartCount[itemName] - 1
-        })
-        setTotalItemCount(totalItemCount - 1)
-    }
 
     return (
         <View>
@@ -122,15 +111,20 @@ export default function RestaurantScreen({route} : any) {
                     />
                 </View>
             }
-            ListFooterComponent={
-                <View
-                    style={{paddingVertical : (totalItemCount > 0) ?  30: 0}}
-                >
-                    {/* <Text>Hello</Text> */}
-                </View>
-            }
+            // ListFooterComponent={
+            //     // <View
+            //     //     style={{paddingVertical : (totalItemCount > 0) ?  30: 0}}
+            //     // >
+            //     //     {/* <Text>Hello</Text> */}
+            //     // </View>
+            // }
             keyExtractor={item=>item.name}
-                renderItem={({item})=>(
+                renderItem={({item})=>{
+
+                    const cartItem = cart.find(
+                        cartItem => cartItem.itemName === item.name
+                    );
+                    return(
                     <View style={styles.flatListContainer}>
                         <Pressable
                             onPress={()=>handleModalOpenPress(item)}
@@ -156,17 +150,20 @@ export default function RestaurantScreen({route} : any) {
                                 ₹{item.price}
                             </Text>
                             {
-                                itemCartCount[item.name] > 0 
+                                
+                                cartItem
                                     ?
                                         <AddButtonwithplusminus 
-                                            itemCount={itemCartCount[item.name]}
-                                            onAddPress={()=>handleAddPress(item.name)}
-                                            onMinusPress={()=>handleMinusPress(item.name)}
+                                            itemCount={
+                                                cartItem.numberOfItem
+                                            }
+                                            onAddPress={()=>handleAddToCart(item.name,item.image)}
+                                            onMinusPress={()=>handleRemoveFromCart(item.name,item.image)}
                                         />
                                     :
 
                                     <Pressable 
-                                        onPress={()=>handleAddToCart(item.name)}
+                                        onPress={()=>handleAddToCart(item.name,item.image)}
                                         style={styles.addButton}
                                     >
                                         
@@ -177,18 +174,32 @@ export default function RestaurantScreen({route} : any) {
                         </View>
                         
                     </View>
-                )}  
+                )
+                }}  
 
         />
 
+            {
+                cart.length > 0 &&
+                    <CartDropdown
+                        totalItemCount={
+                            cart.reduce(
+                                (acc,curr) => acc + (curr.numberOfItem ?? 0),
+                                0,
+                            )
+                        }
+                    />
+            }
         
                 
-            {
+            {/* {
                 totalItemCount > 0 &&  
                     <CartDropdown
                         totalItemCount={totalItemCount}
                     />
-            }
+            } */}
+
+            
         </View> 
 
         
@@ -218,7 +229,8 @@ const styles = StyleSheet.create({
         flex : 1,
         width : '40%',
         marginVertical : 10,
-        marginHorizontal : 10,
+        marginHorizontal : 15
+        
     },
     image : {
         borderRadius : 10,

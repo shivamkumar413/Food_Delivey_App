@@ -1,37 +1,84 @@
 import { create } from "zustand";
 
-type CartItem = {
-    [key : string] : number
+// What are the things i need to store on each add or minus click,
+// Total item count : easy
+// [ 
+//  {
+//      itemName : '',
+//      numberOfItem : 1,
+//      itemImage : ''
+//  },
+//  {
+//      itemName : '',
+//      numberOfItem : 1,
+//      itemImage : ''
+//  }
+//  ]
+// On adding any item , i will check if that item doesn;t exist then add it with its name , image and 
+
+type cartObject = {
+    itemName : string;
+    itemImage : string;
+    numberOfItem?: number;
 }
 
-type CartStore = {
-    itemCartCount : CartItem,
-    setItemCartCount : (incomingCartCout : CartItem)=>void,
-    restaurantName : string,
-    setRestaurantName : (incomingName : string)=>void,
-    totalItemCount: number,
-    setTotalItemCount : (incomingCount : number)=>void,
+type Store = {
+    cart : cartObject[],
+    addToCart : (incomingItem : cartObject)=>void,
+    removeFromCart : (incomingItem : cartObject)=>void
 }
 
-export const useCartStore = create<CartStore>((set,get)=>{
+
+export const useCartStore = create<Store>((set,get)=>{
     return{
-        restaurantName : '',
-        totalItemCount : 0,
-        setRestaurantName : (incomingName)=>{
-            set({
-                restaurantName : incomingName,
+        cart : [],
+        addToCart : (incomingItem : cartObject)=>{
+            set((state)=>{
+                const existingItem = state.cart.find(
+                    item => item.itemName === incomingItem.itemName
+                )
+
+                if(existingItem){
+                    return {
+                        cart : state.cart.map(item =>
+                            item.itemName === incomingItem.itemName 
+                            ? 
+                                {
+                                    ...item,
+                                    numberOfItem : (item.numberOfItem ?? 0) + 1
+                                }
+                            : item
+                        )
+                    }
+                }
+
+                return {
+                    cart : [
+                        ...state.cart,
+                        {
+                            ...incomingItem,
+                            numberOfItem : 1,
+                        }
+                    ]
+                }
+
             })
         },
-        setTotalItemCount : (incomingCount : number)=>{
-            set({
-                totalItemCount : incomingCount
-            })
-            
-        },
-        itemCartCount : {},
-        setItemCartCount : (incomingCartCount : CartItem)=>{
-            set({
-                itemCartCount : {...get().itemCartCount,...incomingCartCount}
+        removeFromCart : (incomingItem : cartObject)=>{
+            set((state)=>{
+
+                return{
+                    cart : state.cart.map(item =>
+                        item.itemName === incomingItem.itemName
+                        ?
+                        {
+                            ...item,
+                            numberOfItem : (item.numberOfItem ?? 0) - 1
+                        }
+                        : item
+                    ).filter(item => (item.numberOfItem ?? 0) > 0),
+                    
+                }
             })
         }
     }

@@ -9,15 +9,20 @@ import CartDropdown from '../Components/molecules/CartDropdown/CartDropdown'
 
 export default function HomeScreen() {
 
-  const { totalItemCount } = useCartStore()
+  const { cart } = useCartStore()
   return (
     <View style={{flex : 1}}>
     
       <RestaurantList />
       { 
-          (totalItemCount > 0) &&
+          (cart.length > 0) &&
             <CartDropdown 
-              totalItemCount={totalItemCount}
+              totalItemCount={
+                cart.reduce(
+                  (acc,curr) => acc + (curr.numberOfItem ?? 0),
+                  0, 
+                )
+              }
             />
       }
     </View>

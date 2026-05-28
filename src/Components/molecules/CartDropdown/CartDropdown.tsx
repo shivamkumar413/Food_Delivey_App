@@ -1,15 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
     totalItemCount : number
 }
 
 export default function CartDropdown({totalItemCount} : Props) {
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{totalItemCount} item added</Text>
-      <Text style={styles.text}>View Cart  {'>'}</Text>
+      <Pressable
+        // @ts-ignore
+        onPress={()=>navigation.navigate('CartScreen')}
+      >
+        <Text style={styles.text}>View Cart  {'>'}</Text>
+      </Pressable>
+      
     </View>
   )
 }
