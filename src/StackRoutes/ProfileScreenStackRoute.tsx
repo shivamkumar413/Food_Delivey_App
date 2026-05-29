@@ -8,10 +8,10 @@ export default function ProfileScreenStackRoute(){
     return(
         <Stack.Navigator>
             <Stack.Screen 
-                name='GiftablesStack'  
+                name='ProfileScreenStack'  
                 component={ProfileScreen}
                 options={{
-                    headerShown : false
+                    headerShown : false,
                 }} 
             />
         </Stack.Navigator>

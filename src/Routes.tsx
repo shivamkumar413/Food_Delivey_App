@@ -10,7 +10,7 @@ import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
+export default function Routes() {
   return (
     <Tab.Navigator
         screenOptions={({route})=>({
@@ -78,16 +78,12 @@ function MyTabs() {
         <Tab.Screen 
             name="Profile" 
             component={ProfileScreenStackRoute}
+            options={{
+                headerShown : false,
+                
+            }}
         />
     </Tab.Navigator>
   );
 }
 
-export default function Routes(){
-    return(
-        <NavigationContainer>
-            <MyTabs />
-        </NavigationContainer>
-    )
-    
-}

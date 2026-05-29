@@ -8,7 +8,7 @@ export default function OrderScreenStackRoute(){
     return(
         <Stack.Navigator>
             <Stack.Screen 
-                name='Order'  
+                name='OrderScreen'  
                 component={OrderScreen} 
                 options={{
                     headerShown : false,

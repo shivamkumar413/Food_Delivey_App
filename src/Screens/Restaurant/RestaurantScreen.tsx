@@ -190,7 +190,11 @@ export default function RestaurantScreen({route} : any) {
                             </View>    
                         </View>
 
-                        <Text style={styles.itemName}>{item.name}</Text>
+                        <Text style={styles.itemName}
+                            numberOfLines={1}
+                        >
+                            {item.name}
+                        </Text>
                         
                         <View style={styles.priceContainer}>
                             <Text style={styles.priceText}>
