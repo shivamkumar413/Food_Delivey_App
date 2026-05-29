@@ -9,13 +9,13 @@ const Stack = createStackNavigator();
 function MyStack(){
     return(
         <Stack.Navigator>
-            {/* <Stack.Screen 
+            <Stack.Screen 
                 name='Login'
                 component={LoginPage}
                 options={{
                     headerShown : false,
                 }}
-            /> */}
+            />
             <Stack.Screen 
                 name='Main'
                 component={Routes}

@@ -27,7 +27,7 @@ export default function LoginPage() {
         >
             <View style={styles.container}>
                 <Text style={{fontSize : 35,marginBottom : 20}}>
-                    Sing In
+                    Sign In
                 </Text>
                 <TextInput 
                     placeholder='Email'
