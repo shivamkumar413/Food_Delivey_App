@@ -17,20 +17,67 @@
     Scan the QR Code using Expo Go app.
 
 ## Project structure
-![alt text](assets/image.png)
-![alt text](assets/image-1.png)
-![alt text](assets/image-2.png)
+
+<p align="center">
+  <img src="assets/image.png" width="300" height="400" alt="Screenshot 1"/>
+</p>
+
+<p align="center">
+  <img src="assets/image-1.png" width="300" height="400" alt="Screenshot 2"/>
+</p>
+
+<p align="center">
+  <img src="assets/image-2.png" width="300" height="400" alt="Screenshot 3"/>
+</p>
 
 ## Screenshots
-![Login Screen](assets/LoginPage.jpeg)
-![OnBoarding Screen1](assets/OnboardingScreen.jpeg)
-![OnBoarding Screen2](assets/OnBoardingScreen2.jpeg)
-![Restaurant Screen1](assets/RestaurantScreen.jpeg)
-![Restaurant Screen2](assets/RestaurantScreen2.jpeg)
-![Restaurant Screen3](assets/CartFloatingBar.jpeg)
-![Cart Screen](assets/CartScreen.jpeg)
-![Clear Cart Modal](assets/ClearCart.jpeg)
-![Profile Screen](assets/ProfilePage.jpeg)
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/LoginPage.jpeg" width="200" height="400" alt="Login Screen"/>
+      <br/>Login Screen
+    </td>
+    <td align="center">
+      <img src="assets/OnboardingScreen.jpeg" width="200" height="400" alt="OnBoarding Screen 1"/>
+      <br/>OnBoarding Screen 1
+    </td>
+    <td align="center">
+      <img src="assets/OnBoardingScreen2.jpeg" width="200" height="400" alt="OnBoarding Screen 2"/>
+      <br/>OnBoarding Screen 2
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="assets/RestaurantScreen.jpeg" width="200" height="400" alt="Restaurant Screen 1"/>
+      <br/>Restaurant Screen 1
+    </td>
+    <td align="center">
+      <img src="assets/RestaurantScreen2.jpeg" width="200" height="400" alt="Restaurant Screen 2"/>
+      <br/>Restaurant Screen 2
+    </td>
+    <td align="center">
+      <img src="assets/CartFloatingBar.jpeg" width="200" height="400" alt="Restaurant Screen 3"/>
+      <br/>Restaurant Screen 3
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="assets/CartScreen.jpeg" width="200" height="400" alt="Cart Screen"/>
+      <br/>Cart Screen
+    </td>
+    <td align="center">
+      <img src="assets/ClearCart.jpeg" width="200" height="400" alt="Clear Cart Modal"/>
+      <br/>Clear Cart Modal
+    </td>
+    <td align="center">
+      <img src="assets/ProfilePage.jpeg" width="200" height="400" alt="Profile Screen"/>
+      <br/>Profile Screen
+    </td>
+  </tr>
+</table>
 
 ## Assumptions
     - Login : Can login using any mock email and password.
