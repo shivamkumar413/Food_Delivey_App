@@ -1,5 +1,5 @@
-import { FlatList, Image, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { Button, FlatList, Image, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { menuItem } from '../../utils/Mockdata/Menu';
 import { MaterialCommunityIcons, Foundation } from '@expo/vector-icons';
 import FoodDetailModal from '../../Components/atoms/FoodDetailModal/FoodDetailModal';
@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import AddButtonwithplusminus from '../../Components/atoms/AddButtonwithplusminus/AddButtonwithplusminus';
 import CartDropdown from '../../Components/molecules/CartDropdown/CartDropdown';
 import { useCartStore } from '../../Stores/useCartStore';
+import ConfirmationModal from '../../Components/molecules/ConfirmationModal/ConfirmationModal';
 
 
 type menuItemType = {
@@ -42,7 +43,12 @@ export default function RestaurantScreen({route} : any) {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [modalDetails,setModalDetails] = React.useState<menuItemType>();
     const {headerShown,setHeaderShown,setHeaderText } = useRestaurantScreenHeaderStore();
-    const { cart,addToCart,removeFromCart } = useCartStore();
+    const { cart,addToCart,removeFromCart,restaurantName,setRestaurantName,clearCart } = useCartStore();
+    const [confirmationModal, setConfirmationModal] = useState({
+        visible : false,
+        onYes : ()=>{},
+        onNo : ()=>{}
+    })
 
     useEffect(()=>{
         if(!name) return;
@@ -51,19 +57,56 @@ export default function RestaurantScreen({route} : any) {
         setHeaderShown(false);
         setHeaderText(name);
     }, [id])
+    
+    function handleConfirmation():Promise<boolean>{
+        return new Promise((res)=>{
+            setConfirmationModal({
+            visible: true,
+
+            onYes: () => {
+                setConfirmationModal(prev => ({
+                    ...prev,
+                    visible: false,
+                }));
+
+                res(true);
+            },
+
+            onNo: () => {
+                setConfirmationModal(prev => ({
+                    ...prev,
+                    visible: false,
+                }));
+
+                res(false);
+            },
+        });
+        });
+    }
 
     function handleModalOpenPress(item : menuItemType){
         setIsModalVisible(true);
         setModalDetails(item);
     }
 
-    function handleAddToCart(itemName : string,itemImage : string,itemPrice : number){
+    async function handleAddToCart(itemName : string,itemImage : string,itemPrice : number,isVeg : boolean){
+        if(cart.length === 0){
+            setRestaurantName(name)
+        }else if(cart.length > 0 && restaurantName !== name){
+            const confirm = await handleConfirmation();
+
+            if(!confirm) return;
+
+            clearCart();
+            setRestaurantName(name);
+        }
         addToCart({
             itemName : itemName,
             itemImage : itemImage,
-            itemPrice : itemPrice
+            itemPrice : itemPrice,
+            isVeg : isVeg
         })
-        console.log(cart)
+        //console.log(cart)
     }
 
     function handleRemoveFromCart(itemName : string,itemImage : string){
@@ -144,9 +187,9 @@ export default function RestaurantScreen({route} : any) {
                             <View style={{flexDirection : 'row', alignItems : 'center', backgroundColor : '#EAFBE7', paddingHorizontal : 5, borderRadius : 5}}>
                                 <Foundation name='star' size={10} color={'green'}/>
                                 <Text style={styles.ratingText}>{item.rating} ({item.numberOfRating})</Text>
-                            </View>
-                            
+                            </View>    
                         </View>
+
                         <Text style={styles.itemName}>{item.name}</Text>
                         
                         <View style={styles.priceContainer}>
@@ -161,13 +204,13 @@ export default function RestaurantScreen({route} : any) {
                                             itemCount={
                                                 cartItem.numberOfItem
                                             }
-                                            onAddPress={()=>handleAddToCart(item.name,item.image,item.price)}
+                                            onAddPress={()=>handleAddToCart(item.name,item.image,item.price,item.isVeg)}
                                             onMinusPress={()=>handleRemoveFromCart(item.name,item.image)}
                                         />
                                     :
 
                                     <Pressable 
-                                        onPress={()=>handleAddToCart(item.name,item.image,item.price)}
+                                        onPress={()=>handleAddToCart(item.name,item.image,item.price,item.isVeg)}
                                         style={styles.addButton}
                                     >
                                         
@@ -194,9 +237,17 @@ export default function RestaurantScreen({route} : any) {
                         }
                     />
             }
-        
+
+
                 
-            
+            {confirmationModal.visible && 
+                <ConfirmationModal 
+                    isVisible={confirmationModal.visible}
+                    onYesPress={confirmationModal.onYes}
+                    onNoPress={confirmationModal.onNo}
+                    name={name}
+                />
+            }
 
             
         </View> 

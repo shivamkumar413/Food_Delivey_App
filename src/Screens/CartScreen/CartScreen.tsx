@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useCartStore } from '../../Stores/useCartStore'
 import AddButtonwithplusminus from '../../Components/atoms/AddButtonwithplusminus/AddButtonwithplusminus'
 import { useNavigation } from '@react-navigation/native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 
 export default function CartScreen() {
 
   const { cart,addToCart,removeFromCart } = useCartStore()
   const [totalPrice,setTotalPrice] = useState(0);
-
   const navigation = useNavigation();
 
   useEffect(()=>{
@@ -27,6 +27,8 @@ export default function CartScreen() {
     setTotalPrice(sum)
   },[cart,handleAddToCart,handleRemoveFromCart])
 
+  
+
   function handleAddToCart(itemName : string,itemImage : string,itemPrice : number){
         addToCart({
             itemName : itemName,
@@ -40,9 +42,7 @@ export default function CartScreen() {
         removeFromCart({
             itemName : itemName,
         })
-        console.log(cart.length)
-        
-        
+        //console.log(cart.length)        
     }
 
   return (
@@ -52,7 +52,11 @@ export default function CartScreen() {
           data={cart}
           renderItem={({item})=>(
             <View style={styles.flatListContainer}>
-              <Text style={styles.itemNameText}>{item.itemName} </Text>
+              <View style={{flexDirection : 'row',justifyContent : 'space-between',alignItems : 'center', gap : 5,borderBottomColor : 'gray',borderBottomWidth : 0.5,}}>
+                {item.isVeg ? <MaterialCommunityIcons name="square-circle" color={'green'}/> : <MaterialCommunityIcons name="square-circle" color={'red'}/>}
+                <Text style={styles.itemNameText}>{item.itemName} </Text>
+              </View>
+              
               <View style={{flexDirection : 'row',gap : 10,alignItems : 'center'}}>
                 <AddButtonwithplusminus 
                   itemCount={item.numberOfItem}
@@ -73,7 +77,7 @@ export default function CartScreen() {
             <Text style={{fontSize : 10,color : 'gray',fontWeight : '300'}}>Pay cash or ask for QR code</Text>
           </View>
           <Pressable style={styles.payButton}>
-            <Text>Pay ₹{totalPrice}</Text>
+            <Text style={{color : '#FFFFFF'}}>Pay ₹{totalPrice}</Text>
           </Pressable>
       </View>
     </View>
@@ -99,15 +103,11 @@ const styles = StyleSheet.create({
     justifyContent : 'space-between',
     alignItems : 'center',
     paddingVertical : 5,
-    
-
   },
   itemNameText : {
     fontSize : 13,
     fontWeight : '500',
-    borderBottomColor : 'gray',
-    borderBottomWidth : 0.5,
-     paddingVertical : 6,
+    paddingVertical : 6,
   },
   itemPriceText : {
     fontSize : 12,
@@ -124,13 +124,15 @@ const styles = StyleSheet.create({
     paddingHorizontal : 15,
     backgroundColor : 'white',
     elevation : 5,
+    alignItems : 'center'
   },
   payButton : {
-    backgroundColor : 'green',
+    backgroundColor : '#16A34A',
     borderRadius : 10,
     flexDirection : 'row',
     justifyContent : 'center',
     alignItems : 'center',
     paddingHorizontal : 12,
+    paddingVertical : 10
   }
 })

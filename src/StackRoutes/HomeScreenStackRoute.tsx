@@ -6,6 +6,7 @@ import { Props } from '../Components/atoms/Restaurants/Restaurants';
 import { useRestaurantScreenHeaderStore } from '../Stores/useRestaurantScreenHeaderStore';
 import RestaurantScreenHeader from '../Components/molecules/RestaurantScreenHeader/RestaurantScreenHeader';
 import CartScreen from '../Screens/CartScreen/CartScreen';
+import { useCartStore } from '../Stores/useCartStore';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ export type HomeStackParamList = {
 export default function HomeScreenStackRoute(){
     
     const { headerShown } = useRestaurantScreenHeaderStore();
+    const { restaurantName } = useCartStore()
 
     return(
         <Stack.Navigator>
@@ -40,6 +42,15 @@ export default function HomeScreenStackRoute(){
             <Stack.Screen 
                 name="CartScreen"
                 component={CartScreen}
+                options={{
+                    headerTitle : restaurantName,
+                    headerTitleStyle : {
+                        fontSize : 11,
+                        fontWeight : '500',
+                        color : 'gray'
+                    }
+                    
+                }}
             />
         </Stack.Navigator>
     )

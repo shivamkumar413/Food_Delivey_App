@@ -21,12 +21,16 @@ type cartObject = {
     itemImage?: string;
     numberOfItem?: number;
     itemPrice ?: number;
+    isVeg?: boolean;
 }
 
 type Store = {
     cart : cartObject[],
     addToCart : (incomingItem : cartObject)=>void,
-    removeFromCart : (incomingItem : cartObject)=>void
+    removeFromCart : (incomingItem : cartObject)=>void,
+    restaurantName : string,
+    setRestaurantName : (incomingName : string)=>void,
+    clearCart : ()=>void,
 }
 
 
@@ -80,6 +84,17 @@ export const useCartStore = create<Store>((set,get)=>{
                     ).filter(item => (item.numberOfItem ?? 0) > 0),
                     
                 }
+            })
+        },
+        restaurantName : '',
+        setRestaurantName : (incomingName : string)=>{
+            set({
+                restaurantName : incomingName
+            })
+        },
+        clearCart : ()=>{
+            set({
+                cart : []
             })
         }
     }
